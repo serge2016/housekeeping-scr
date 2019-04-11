@@ -15,7 +15,7 @@ Monitors the process by PID and directory size by path, writes .log file with th
 OR plots the provided .log file.
 
 Dependencies:
-python 2.7:
+python:
  - psutil
  - subprocess
  - mathplotlib
