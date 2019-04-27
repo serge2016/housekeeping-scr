@@ -16,7 +16,7 @@ OR plots the provided .log file.
 
 Dependencies:
 python:
- - psutil
+ - psutil (tested for v5.6.1)
  - subprocess
  - mathplotlib
  - pandas
