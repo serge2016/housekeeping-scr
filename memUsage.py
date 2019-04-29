@@ -1,5 +1,5 @@
+#!/usr/bin/python
 # last update 27.04.2019
-#!/bin/python
 from __future__ import print_function
 import argparse
 import sys, os
