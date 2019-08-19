@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
-# last update 19.08.2019
 # Authors: Olga I. Zolotareva, Sergey I. Mitrofanov
+# LastUpdate: 19.08.2019 16:10.
 
 from __future__ import print_function
 import argparse
@@ -42,21 +42,25 @@ parser.add_argument('--plot_all', dest='plot_all', action='store_true', help='Sw
 
 
 def get_pcpu_pmem(pid):
-    process = psutil.Process(pid)
-    pmem = process.memory_percent() # % of memory used
-    mem_rss = process.memory_info().rss # rss = residen set size is the portion of memory occupied by a process
-    pcpu = process.cpu_percent(interval=0.02) # % of CPU used
-    for child in process.children(recursive=True):
-        try:
-            pmem += child.memory_percent()
-            pcpu += child.cpu_percent(interval=0.02)
-            mem_rss += child.memory_info().rss
-        except:
-            pass
-    mem = psutil.virtual_memory() # total memory available
-    mem_rss = (mem_rss*1.0)/(1024*1024*1024)
-    mem_avail = (mem.available*1.0)/(1024*1024*1024)
-    return mem_avail, mem_rss, pmem, pcpu
+    try:
+        process = psutil.Process(pid)
+        pmem = process.memory_percent() # % of memory used
+        mem_rss = process.memory_info().rss # rss = residen set size is the portion of memory occupied by a process
+        pcpu = process.cpu_percent(interval=0.02) # % of CPU used
+        for child in process.children(recursive=True):
+            try:
+                pmem += child.memory_percent()
+                pcpu += child.cpu_percent(interval=0.02)
+                mem_rss += child.memory_info().rss
+            except:
+                pass
+        mem = psutil.virtual_memory() # total memory available
+        mem_rss = (mem_rss*1.0)/(1024*1024*1024)
+        mem_avail = (mem.available*1.0)/(1024*1024*1024)
+        exited = 0
+    except:
+        exited = 1
+    return mem_avail, mem_rss, pmem, pcpu, exited
 
 def get_avail_space(wdir):
     '''Monitors available disk space.'''
@@ -100,7 +104,10 @@ if not args.plot: # then write logfile
     outfile.write('\t'.join(["time","pid","avail_mem","mem_rss","%mem","%cpu","wdir_size","free_space"])+'\n')
     while True:
         if psutil.pid_exists(pid):
-            mem_avail,mem_rss,pmem,pcpu = get_pcpu_pmem(pid)
+            mem_avail,mem_rss,pmem,pcpu,exited = get_pcpu_pmem(pid)
+            if exited:
+                print ( "Process with PID" , pid , "was terminated ...",file=sys.stderr)
+                break
             dir_size = get_dir_size(args.wdir)
             space_avail = get_avail_space(args.wdir)
             outfile.write('%d\t%d\t%.1f\t%.1f\t%.2f\t%.2f\t%.1f\t%.1f\n' % (time.time()-t_start,pid,mem_avail,mem_rss,pmem,pcpu,dir_size,space_avail))
