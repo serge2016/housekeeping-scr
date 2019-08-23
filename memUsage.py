@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 # Authors: Olga I. Zolotareva, Sergey I. Mitrofanov
-# LastUpdate: 19.08.2019 16:10.
+# LastUpdate: 23.08.2019 16:00.
 
 from __future__ import print_function
 import argparse
@@ -59,6 +59,7 @@ def get_pcpu_pmem(pid):
         mem_avail = (mem.available*1.0)/(1024*1024*1024)
         exited = 0
     except:
+        mem_avail, mem_rss, pmem, pcpu = (0, 0, 0, 0)
         exited = 1
     return mem_avail, mem_rss, pmem, pcpu, exited
 
@@ -106,14 +107,14 @@ if not args.plot: # then write logfile
         if psutil.pid_exists(pid):
             mem_avail,mem_rss,pmem,pcpu,exited = get_pcpu_pmem(pid)
             if exited:
-                print ( "Process with PID" , pid , "was terminated ...",file=sys.stderr)
+                print ( "Process with PID" , pid , "was terminated [1] ...",file=sys.stderr)
                 break
             dir_size = get_dir_size(args.wdir)
             space_avail = get_avail_space(args.wdir)
             outfile.write('%d\t%d\t%.1f\t%.1f\t%.2f\t%.2f\t%.1f\t%.1f\n' % (time.time()-t_start,pid,mem_avail,mem_rss,pmem,pcpu,dir_size,space_avail))
             outfile.flush()
         else:
-            print ( "Process with PID" , pid , "was terminated ...",file=sys.stderr)
+            print ( "Process with PID" , pid , "was terminated [2] ...",file=sys.stderr)
             break
         time.sleep(args.time_step)
 
