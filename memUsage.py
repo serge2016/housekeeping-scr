@@ -9,7 +9,7 @@ import psutil
 import time, datetime
 import subprocess
 
-LastUpdate = "01.08.2019 19:50"
+LastUpdate = "02.08.2019 01:45"
 Version = "0.2.0"
 
 ### argparse ###
@@ -121,7 +121,7 @@ if not args.in_mem_log: # then write logfile
     outfile.write('\t'.join(["#CoreMaxFreq", str(int(cpuFreqMax))+" MHz"]) + '\n')
     outfile.write('\t'.join(["#TotalRAM", str(int(memTotalGb))+" GB"]) + '\n')
     outfile.write('\t'.join(["#Date", datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')]) + '\n')
-    outfile.write('\t'.join(["#memUsageVerision", Version+" ("+LastUpdate+")"]) + '\n')
+    outfile.write('\t'.join(["#memUsageVersion", Version+" ("+LastUpdate+")"]) + '\n')
     outfile.write('\n')
     colNames = ["time", "pid", "avail_mem", "mem_rss", "%mem", "%cpu", "wdir_size", "free_space"]
     outfile.write('\t'.join(colNames) + '\n')
