@@ -9,7 +9,7 @@ import psutil
 import time, datetime
 import subprocess
 
-LastUpdate = "01.08.2019 18:50"
+LastUpdate = "01.08.2019 19:50"
 Version = "0.2.0"
 
 ### argparse ###
@@ -95,7 +95,10 @@ if not args.in_mem_log: # then write logfile
 
     machineName = socket.gethostname() # hostname
     cpuAmount = psutil.cpu_count() # virtual machine CPU count
-    cpuFreqMax = psutil.cpu_freq().max # CPU frequency [psutil.cpu_freq() should return 'scpufreq(current=1200.0, min=1200.0, max=3601.0)'], also 'psutil.cpu_freq(percpu=True)' to get info about every vCore
+    if psutil.cpu_freq().max == 0.0:
+        cpuFreqMax = psutil.cpu_freq().current # Max CPU frequency inside Docker is 0.0, that's why using current
+    else:
+        cpuFreqMax = psutil.cpu_freq().max # CPU frequency [psutil.cpu_freq() should return 'scpufreq(current=1200.0, min=1200.0, max=3601.0)'], also 'psutil.cpu_freq(percpu=True)' to get info about every vCore
     memTotalGb = (psutil.virtual_memory().total*1.0)/(1024*1024*1024) # total physical memory size in GB
     t_start = time.time()
 
