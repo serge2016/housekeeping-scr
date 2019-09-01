@@ -1,7 +1,8 @@
 #!/usr/bin/python
 
 # Authors: Olga I. Zolotareva, Sergey I. Mitrofanov
-# LastUpdate: 30.08.2019 23:40.
+LastUpdate = "01.08.2019 11:20"
+Version = "0.2.0"
 
 from __future__ import print_function
 import argparse
@@ -12,17 +13,17 @@ import subprocess
 
 
 ### argparse ###
-parser = argparse.ArgumentParser(description="""Monitors the process by PID and directory size by path, writes .log file with the following TAB-separated fields:
+parser = argparse.ArgumentParser(description="""Monitors the process by PID and directory size by path, writes .mem.log file with the following TAB-separated fields:
      - time, s
      - PID
-     - available RAM, Gb
-     - residen set size, Gb - the portion of RAM occupied by a process
+     - available RAM, GB
+     - residen set size, GB - the portion of RAM occupied by a process
      - % of total RAM occupied by a process, %
-     - % of CPU used by a process.
-     - size of given folder, Gb
-     - free disk space on partition with given folder, Gb
+     - % of CPU used by a process
+     - size of given folder, GB
+     - free disk space on partition with given folder, GB
 
-OR plots the provided logfile.
+OR plots the provided memlog file.
 """ , formatter_class=argparse.RawTextHelpFormatter)
 
 group = parser.add_mutually_exclusive_group(required=True)
@@ -112,6 +113,7 @@ if not args.in_mem_log: # then write logfile
     outfile.write('\t'.join(["#CoreMaxFreq", str(int(cpuFreqMax))+" MHz"]) + '\n')
     outfile.write('\t'.join(["#TotalRAM", str(int(memTotalGb))+" GB"]) + '\n')
     outfile.write('\t'.join(["#Date", datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')]) + '\n')
+    outfile.write('\t'.join(["#memUsageVerision", Version+" ("+LastUpdate+")"]) + '\n')
     outfile.write('\n')
     colNames = ["time", "pid", "avail_mem", "mem_rss", "%mem", "%cpu", "wdir_size", "free_space"]
     outfile.write('\t'.join(colNames) + '\n')
