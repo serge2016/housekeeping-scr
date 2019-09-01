@@ -1,8 +1,6 @@
 #!/usr/bin/python
 
 # Authors: Olga I. Zolotareva, Sergey I. Mitrofanov
-LastUpdate = "01.08.2019 11:20"
-Version = "0.2.0"
 
 from __future__ import print_function
 import argparse
@@ -11,6 +9,8 @@ import psutil
 import time, datetime
 import subprocess
 
+LastUpdate = "01.08.2019 14:50"
+Version = "0.2.0"
 
 ### argparse ###
 parser = argparse.ArgumentParser(description="""Monitors the process by PID and directory size by path, writes .mem.log file with the following TAB-separated fields:
