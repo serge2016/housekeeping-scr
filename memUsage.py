@@ -9,7 +9,7 @@ import psutil
 import time, datetime
 import subprocess
 
-LastUpdate = "01.08.2019 14:50"
+LastUpdate = "01.08.2019 18:50"
 Version = "0.2.0"
 
 ### argparse ###
@@ -106,7 +106,12 @@ if not args.in_mem_log: # then write logfile
     if not out_file_name.endswith(".mem.log"):
         out_file_name = out_file_name + ".mem.log"
 
-    outfile = open(out_file_name,"w")
+    if os.path.exists(out_file_name):
+        append_write = 'a' # append if already exists
+    else:
+        append_write = 'w' # make a new file if not
+
+    outfile = open(out_file_name,append_write)
 
     outfile.write('\t'.join(["#Hostname", machineName]) + '\n')
     outfile.write('\t'.join(["#Cores", str(cpuAmount)]) + '\n')
